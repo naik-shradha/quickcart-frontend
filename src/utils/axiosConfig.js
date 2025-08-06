@@ -8,6 +8,8 @@ const instance = axios.create({
   baseURL: process.env.REACT_APP_BACKEND_URL || "http://localhost:5000/api",
 });
 
+console.log("🌐 Axios base URL:", instance.defaults.baseURL);
+
 instance.interceptors.request.use(
   (config) => {
     const token = store.getState().auth.token;
