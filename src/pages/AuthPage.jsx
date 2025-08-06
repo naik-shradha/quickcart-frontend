@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import axios from "../utils/axiosConfig";
 import { useDispatch } from "react-redux";
 import { setUser } from "../redux/authSlice";
 import { useNavigate, Link } from "react-router-dom";
@@ -19,31 +19,30 @@ const AuthPage = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    const endpoint = isLogin
-      ? "http://localhost:5000/api/users/login"
-      : "http://localhost:5000/api/users/register";
+  e.preventDefault();
+  setLoading(true);
 
-    try {
-      const payload = isLogin
-        ? { email: form.email, password: form.password }
-        : { name: form.name, email: form.email, password: form.password };
+  const endpoint = isLogin ? "/users/login" : "/users/register";
 
-      const res = await axios.post(endpoint, payload);
+  try {
+    const payload = isLogin
+      ? { email: form.email, password: form.password }
+      : { name: form.name, email: form.email, password: form.password };
 
-      localStorage.setItem("token", res.data.token);
-      localStorage.setItem("user", JSON.stringify(res.data.user));
+    const res = await axios.post(endpoint, payload);
 
-      dispatch(setUser(res.data));
-      toast.success(`${isLogin ? "Login" : "Registration"} successful!`);
-      setTimeout(() => navigate("/shop"), 1500);
-    } catch (err) {
-      toast.error(err.response?.data?.message || "Something went wrong");
-    } finally {
-      setLoading(false);
-    }
-  };
+    localStorage.setItem("token", res.data.token);
+    localStorage.setItem("user", JSON.stringify(res.data.user));
+
+    dispatch(setUser(res.data));
+    toast.success(`${isLogin ? "Login" : "Registration"} successful!`);
+    setTimeout(() => navigate("/shop"), 1500);
+  } catch (err) {
+    toast.error(err.response?.data?.message || "Something went wrong");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
