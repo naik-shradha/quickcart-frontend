@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "../utils/axiosConfig";
 import ProductCard from "../components/ProductCard";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -12,7 +12,7 @@ const ProductList = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/products")
+      .get("/products");
       .then((res) => setProducts(res.data))
       .catch((err) => console.error("Error fetching products:", err));
   }, []);
